@@ -1,5 +1,5 @@
-// 芯颜 AI HowItWorksSection — 使用流程说明
-// 三步骤横向布局，深森绿主色
+// 芯颜 AI HowItWorksSection v2 — 成熟简约
+// 深炭黑背景区块 | 砖赭红步骤强调
 
 import { Upload, Cpu, Sparkles } from 'lucide-react';
 
@@ -31,55 +31,49 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="py-24 bg-[#1C3A2E] relative overflow-hidden">
-      {/* 背景装饰 */}
-      <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-white/3 -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-white/3 translate-y-1/2 -translate-x-1/2" />
+    <section id="how-it-works" className="py-28 bg-[#1A1A1A] relative overflow-hidden">
+      {/* 极淡纹理 */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+        backgroundSize: '40px 40px',
+      }} />
 
-      <div className="max-w-6xl mx-auto px-6 relative">
+      <div className="max-w-6xl mx-auto px-8 relative">
         {/* 标题 */}
-        <div className="text-center mb-16">
-          <p className="font-sans-sc text-sm text-[#C9956A] tracking-widest uppercase mb-3">
-            使用流程
-          </p>
-          <h2 className="font-serif-sc text-4xl font-bold text-[#FAF8F5] mb-4">
-            三步完成
-            <br />
-            <span className="text-[#C9956A]">专业皮肤检测</span>
+        <div className="mb-18">
+          <p className="font-sans-sc text-xs text-[#B85C38] tracking-[0.2em] uppercase mb-4">使用流程</p>
+          <h2 className="font-serif-sc text-4xl font-bold text-white leading-tight">
+            三步完成<br />
+            <span className="text-[#B85C38]">专业皮肤检测</span>
           </h2>
-          <div className="w-24 h-px bg-[#C9956A]/40 mx-auto mt-6" />
+          <div className="w-16 h-px bg-[#B85C38] opacity-40 mt-6" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* 左侧：步骤列表 */}
-          <div className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          {/* 左：步骤 */}
+          <div className="space-y-0">
             {STEPS.map(({ step, icon: Icon, title, description, tips }, index) => (
               <div key={step} className="flex gap-6 group">
-                {/* 步骤编号 + 连接线 */}
+                {/* 步骤线 */}
                 <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-full border-2 border-[#C9956A]/50 flex items-center justify-center flex-shrink-0 group-hover:border-[#C9956A] group-hover:bg-[#C9956A]/10 transition-all duration-300">
-                    <Icon className="w-5 h-5 text-[#C9956A]" />
+                  <div className="w-10 h-10 rounded-sm border border-white/15 flex items-center justify-center flex-shrink-0 group-hover:border-[#B85C38]/60 group-hover:bg-[#B85C38]/8 transition-all duration-250">
+                    <Icon className="w-4 h-4 text-[#B85C38]" strokeWidth={1.5} />
                   </div>
                   {index < STEPS.length - 1 && (
-                    <div className="w-px flex-1 bg-[#C9956A]/20 mt-3 min-h-[32px]" />
+                    <div className="w-px flex-1 bg-white/8 mt-3 min-h-[36px]" />
                   )}
                 </div>
 
                 {/* 内容 */}
-                <div className="pb-8">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="font-playfair text-[#C9956A]/60 text-sm">{step}</span>
-                    <h3 className="font-serif-sc text-xl font-semibold text-[#FAF8F5]">{title}</h3>
+                <div className="pb-10">
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="font-playfair text-[#B85C38]/50 text-xs tracking-widest">{step}</span>
+                    <h3 className="font-serif-sc text-lg font-semibold text-white">{title}</h3>
                   </div>
-                  <p className="font-sans-sc text-[#FAF8F5]/70 text-sm leading-relaxed mb-3">
-                    {description}
-                  </p>
+                  <p className="font-sans-sc text-sm text-white/55 leading-relaxed mb-3">{description}</p>
                   <div className="flex flex-wrap gap-2">
                     {tips.map((tip) => (
-                      <span
-                        key={tip}
-                        className="font-sans-sc text-xs bg-white/10 text-[#FAF8F5]/80 px-3 py-1 rounded-full"
-                      >
+                      <span key={tip} className="font-sans-sc text-xs border border-white/10 text-white/45 px-3 py-1 rounded-sm">
                         {tip}
                       </span>
                     ))}
@@ -89,23 +83,18 @@ export default function HowItWorksSection() {
             ))}
           </div>
 
-          {/* 右侧：手机插图 */}
+          {/* 右：插图 */}
           <div className="flex justify-center lg:justify-end">
             <div className="relative">
-              <div className="w-72 h-72 rounded-full bg-white/5 flex items-center justify-center">
-                <div className="w-56 h-56 rounded-full bg-white/5 flex items-center justify-center">
-                  <img
-                    src={UPLOAD_ILLUSTRATION}
-                    alt="上传照片示意"
-                    className="w-48 h-48 object-contain drop-shadow-2xl"
-                  />
+              <div className="w-64 h-64 rounded-full border border-white/8 flex items-center justify-center">
+                <div className="w-48 h-48 rounded-full border border-white/5 flex items-center justify-center">
+                  <img src={UPLOAD_ILLUSTRATION} alt="上传示意" className="w-40 h-40 object-contain drop-shadow-2xl" />
                 </div>
               </div>
-              {/* 浮动标签 */}
-              <div className="absolute top-4 -right-4 bg-white rounded-xl px-4 py-2 shadow-lg">
-                <div className="font-sans-sc text-xs text-[#1C3A2E] font-medium">✓ 隐私安全</div>
+              <div className="absolute top-2 -right-6 bg-white/8 backdrop-blur-sm border border-white/10 rounded-lg px-4 py-2">
+                <div className="font-sans-sc text-xs text-white/70">✓ 隐私安全</div>
               </div>
-              <div className="absolute bottom-8 -left-8 bg-[#C9956A] rounded-xl px-4 py-2 shadow-lg">
+              <div className="absolute bottom-6 -left-8 bg-[#B85C38] rounded-lg px-4 py-2">
                 <div className="font-sans-sc text-xs text-white font-medium">3秒出结果</div>
               </div>
             </div>

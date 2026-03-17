@@ -1,9 +1,8 @@
-// 芯颜 AI Navbar — 极简医疗美学
-// 深森绿品牌色，透明背景滚动变实色
+// 芯颜 AI Navbar v2 — 成熟简约
+// 底色：暖灰白 | 强调：砖赭红 #B85C38 | 文字：深炭黑 #1A1A1A
 
 import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
-import { Sparkles } from 'lucide-react';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -16,25 +15,25 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
         scrolled
-          ? 'bg-[#FAF8F5]/95 backdrop-blur-md shadow-sm border-b border-[#E8E0D8]'
+          ? 'bg-[#F7F6F4]/96 backdrop-blur-md border-b border-[#E4E2DF]'
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-full bg-[#1C3A2E] flex items-center justify-center group-hover:scale-105 transition-transform">
-            <Sparkles className="w-4 h-4 text-[#C9956A]" />
-          </div>
-          <span className="font-serif-sc text-[#1C3A2E] text-lg font-semibold tracking-wide">
-            芯颜 AI
+        <Link href="/" className="flex items-center gap-0 group select-none">
+          <span className="font-serif-sc text-[#1A1A1A] text-[1.15rem] font-semibold tracking-wide leading-none">
+            芯颜
+          </span>
+          <span className="font-serif-sc text-[#B85C38] text-[1.15rem] font-semibold tracking-wide leading-none ml-0.5">
+            AI
           </span>
         </Link>
 
         {/* Nav Links */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-10">
           {[
             { label: '功能介绍', href: '#features' },
             { label: '使用流程', href: '#how-it-works' },
@@ -43,7 +42,7 @@ export default function Navbar() {
             <a
               key={item.href}
               href={item.href}
-              className="text-sm font-sans-sc text-[#4A4A4A] hover:text-[#1C3A2E] transition-colors duration-200"
+              className="font-sans-sc text-sm text-[#4A4A4A] hover:text-[#1A1A1A] transition-colors duration-200 tracking-wide"
             >
               {item.label}
             </a>
@@ -53,9 +52,8 @@ export default function Navbar() {
         {/* CTA */}
         <a
           href="#upload"
-          className="hidden md:inline-flex items-center gap-2 bg-[#1C3A2E] text-[#FAF8F5] text-sm font-sans-sc px-5 py-2 rounded-full hover:bg-[#2A5040] transition-colors duration-200"
+          className="hidden md:inline-flex items-center gap-2 bg-[#1A1A1A] text-[#F7F6F4] font-sans-sc text-sm px-5 py-2.5 rounded-sm hover:bg-[#B85C38] transition-colors duration-250 tracking-wide"
         >
-          <Sparkles className="w-3.5 h-3.5" />
           免费检测
         </a>
       </div>
