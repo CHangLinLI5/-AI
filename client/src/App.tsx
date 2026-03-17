@@ -1,44 +1,40 @@
-// 芯颜 AI App — 路由与主题配置
-// 设计风格：极简医疗美学 | 浅色主题
-
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, Redirect } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-import AppPage from "./pages/AppPage";
+import { isFirstVisit } from "@/lib/storage";
+import WelcomePage from "@/pages/WelcomePage";
+import AppPage from "@/pages/AppPage";
+import ResultPage from "@/pages/ResultPage";
 
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/app"} component={AppPage} />
-      <Route path={"/404"} component={NotFound} />
+      {/* 根路径：首次访问显示欢迎页，回访直接进 App */}
+      <Route path="/">
+        {() => isFirstVisit() ? <WelcomePage /> : <Redirect to="/app" />}
+      </Route>
+
+      {/* 主 App（含 Tab 导航） */}
+      <Route path="/app" component={AppPage} />
+
+      {/* 检测结果详情 */}
+      <Route path="/result/:id" component={ResultPage} />
+
+      {/* 404 */}
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-function App() {
+export default function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="light">
-        <TooltipProvider>
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              style: {
-                fontFamily: "'Noto Sans SC', 'PingFang SC', sans-serif",
-              },
-            }}
-          />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
+      <TooltipProvider>
+        <Toaster position="top-center" />
+        <Router />
+      </TooltipProvider>
     </ErrorBoundary>
   );
 }
-
-export default App;

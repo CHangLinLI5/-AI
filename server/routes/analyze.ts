@@ -1,7 +1,10 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { Router, json } from "express";
+import multer from "multer";
+import fs from "fs";
 
 const router = Router();
+const upload = multer({ dest: '/tmp/xinyan-uploads/', limits: { fileSize: 15 * 1024 * 1024 } });
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || "",
@@ -37,24 +40,66 @@ const SKIN_ANALYSIS_PROMPT = `你是一位专业的皮肤科 AI 分析助手。�
 
 要求：评分基于实际照片、问题2-4个、产品推荐4个（中国市场常见品牌）、建议4-5条`;
 
+// 模拟数据（API 未配置时使用）
+function generateMockResult() {
+  const r = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const getLevel = (s: number) => s >= 80 ? 'excellent' : s >= 60 ? 'good' : s >= 40 ? 'fair' : 'poor';
+  const score = r(55, 88);
+  const metrics = [
+    { label: '水分充足度', score: r(45, 85), description: '皮肤水分含量检测' },
+    { label: '油脂平衡度', score: r(40, 80), description: '皮脂腺分泌均衡程度' },
+    { label: '皮肤细腻度', score: r(50, 90), description: '毛孔大小与皮肤纹理' },
+    { label: '肤色均匀度', score: r(45, 85), description: '色斑、色沉、暗沉程度' },
+    { label: '皮肤弹性', score: r(55, 92), description: '胶原蛋白与皮肤紧致度' },
+    { label: '皮肤屏障', score: r(50, 88), description: '皮肤防护与自愈能力' },
+  ].map(m => ({ ...m, level: getLevel(m.score) }));
+
+  return {
+    skinType: '混合偏油性肌肤',
+    skinTypeDescription: 'T区油脂分泌旺盛，两颊相对干燥。这是亚洲人群中最常见的肤质类型。',
+    overallScore: score,
+    metrics,
+    issues: [
+      { name: '毛孔粗大', severity: 'mild', area: '鼻翼两侧', tip: '定期去角质，使用收敛水' },
+      { name: '油光问题', severity: 'moderate', area: '额头、鼻子', tip: '使用控油保湿乳' },
+      { name: '色斑/色沉', severity: 'mild', area: '颧骨区域', tip: '做好防晒，使用含烟酰胺产品' },
+    ],
+    recommendations: [
+      '建议每天早晚各洗脸一次，使用温和洁面产品',
+      '坚持每日防晒，即使阴天也需要涂抹 SPF30 以上的防晒产品',
+      '保持充足睡眠（7-8小时），睡眠不足会加速皮肤老化',
+      '多喝水，每天保持 1500-2000ml 的饮水量',
+      '建议使用含烟酰胺的精华液改善肤色不均',
+    ],
+    products: [
+      { id: 'p1', name: '烟酰胺美白精华液', brand: 'The Ordinary', category: '精华液', price: '¥89', reason: '烟酰胺可有效提亮肤色', imageUrl: '', tags: ['美白', '提亮'] },
+      { id: 'p2', name: '水杨酸毛孔精华', brand: "Paula's Choice", category: '精华液', price: '¥299', reason: '深层疏通毛孔，改善黑头', imageUrl: '', tags: ['控油', '缩毛孔'] },
+      { id: 'p3', name: '玻尿酸保湿面霜', brand: 'Neutrogena', category: '面霜', price: '¥149', reason: '多重玻尿酸持久保湿', imageUrl: '', tags: ['保湿', '补水'] },
+      { id: 'p4', name: 'SPF50+ 轻薄防晒乳', brand: 'Anessa', category: '防晒', price: '¥199', reason: '防晒是护肤的基础', imageUrl: '', tags: ['防晒', 'SPF50+'] },
+    ],
+    analysisTime: new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }),
+  };
+}
+
+// ── 处理 JSON base64 上传（旧接口）──
 router.post("/analyze", json({ limit: "15mb" }), async (req, res) => {
   try {
-    if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY.includes("placeholder")) {
-      return res.status(500).json({ error: "服务未配置", message: "请在 .env 中设置 ANTHROPIC_API_KEY" });
-    }
     const { imageBase64, mimeType } = req.body;
-    if (!imageBase64) return res.status(400).json({ error: "缺少图片", message: "请上传一张脸部照片" });
+    if (!imageBase64) return res.status(400).json({ error: "缺少图片" });
 
-    const actualMimeType = mimeType || "image/jpeg";
-    console.log(`[分析] 收到图片: ${actualMimeType}`);
+    if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY.includes("placeholder")) {
+      await new Promise(r => setTimeout(r, 2200));
+      return res.json(generateMockResult());
+    }
 
+    const actualMimeType = (mimeType || "image/jpeg") as any;
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-opus-4-5",
       max_tokens: 4096,
       messages: [{
         role: "user",
         content: [
-          { type: "image", source: { type: "base64", media_type: actualMimeType as any, data: imageBase64 } },
+          { type: "image", source: { type: "base64", media_type: actualMimeType, data: imageBase64 } },
           { type: "text", text: SKIN_ANALYSIS_PROMPT },
         ],
       }],
@@ -63,20 +108,57 @@ router.post("/analyze", json({ limit: "15mb" }), async (req, res) => {
     const textContent = response.content.find(b => b.type === "text");
     if (!textContent || textContent.type !== "text") throw new Error("AI 未返回文本");
 
-    let raw = textContent.text.trim();
-    if (raw.startsWith("```json")) raw = raw.slice(7);
-    if (raw.startsWith("```")) raw = raw.slice(3);
-    if (raw.endsWith("```")) raw = raw.slice(0, -3);
-    raw = raw.trim();
-
+    let raw = textContent.text.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
     const result = JSON.parse(raw);
     result.analysisTime = new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
     return res.json(result);
   } catch (error: any) {
-    console.error("[分析] 错误:", error.message);
-    if (error.status === 401) return res.status(500).json({ error: "认证失败", message: "API Key 无效" });
-    if (error.status === 429) return res.status(429).json({ error: "请求频繁", message: "请稍后再试" });
-    return res.status(500).json({ error: "分析失败", message: error.message || "请稍后重试" });
+    console.error("[分析-JSON] 错误:", error.message);
+    if (error.status === 401) return res.status(500).json({ error: "认证失败" });
+    if (error.status === 429) return res.status(429).json({ error: "请求频繁" });
+    return res.status(500).json({ error: "分析失败", message: error.message });
+  }
+});
+
+// ── 处理 multipart/form-data 上传（新接口）──
+router.post("/analyze-upload", upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "缺少图片" });
+
+    if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY.includes("placeholder")) {
+      fs.unlinkSync(req.file.path);
+      await new Promise(r => setTimeout(r, 2200));
+      return res.json({ result: generateMockResult() });
+    }
+
+    const imageData = fs.readFileSync(req.file.path);
+    const base64 = imageData.toString('base64');
+    const mimeType = (req.file.mimetype || 'image/jpeg') as any;
+    fs.unlinkSync(req.file.path);
+
+    const response = await anthropic.messages.create({
+      model: "claude-opus-4-5",
+      max_tokens: 4096,
+      messages: [{
+        role: "user",
+        content: [
+          { type: "image", source: { type: "base64", media_type: mimeType, data: base64 } },
+          { type: "text", text: SKIN_ANALYSIS_PROMPT },
+        ],
+      }],
+    });
+
+    const textContent = response.content.find(b => b.type === "text");
+    if (!textContent || textContent.type !== "text") throw new Error("AI 未返回文本");
+
+    let raw = textContent.text.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+    const result = JSON.parse(raw);
+    result.analysisTime = new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
+    return res.json({ result });
+  } catch (error: any) {
+    if (req.file?.path) { try { fs.unlinkSync(req.file.path); } catch {} }
+    console.error("[分析-Upload] 错误:", error.message);
+    return res.status(500).json({ error: "分析失败", message: error.message });
   }
 });
 

@@ -1,5 +1,5 @@
 // 芯颜 AI — localStorage 数据管理
-// 管理检测历史和聊天记录
+// 管理检测历史、聊天记录、护肤日历
 
 import type { SkinAnalysisResult } from './skinAnalysis';
 
@@ -21,9 +21,10 @@ export interface HistoryRecord {
   analysisTime: string;
 }
 
-const HISTORY_KEY = 'xinyan_history';
+const HISTORY_KEY     = 'xinyan_history';
 const FIRST_VISIT_KEY = 'xinyan_first_visit';
-const CHAT_KEY = 'xinyan_chat_history';
+const CHAT_KEY        = 'xinyan_chat_history';
+const LOGS_KEY        = 'xinyan_skin_logs';
 
 export function getHistory(): HistoryRecord[] {
   try {
@@ -50,18 +51,14 @@ export function addHistory(result: SkinAnalysisResult, thumbnail: string): Histo
   };
 
   const history = getHistory();
-  history.unshift(record); // 最新的放前面
-
-  // 最多保留 30 条记录（避免 localStorage 爆满）
+  history.unshift(record);
   if (history.length > 30) history.length = 30;
-
   localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
   return record;
 }
 
 export function getHistoryById(id: string): HistoryRecord | null {
-  const history = getHistory();
-  return history.find(h => h.id === id) || null;
+  return getHistory().find(h => h.id === id) || null;
 }
 
 export function clearHistory(): void {
@@ -77,21 +74,14 @@ export function getLast7DaysScores(): { date: string; score: number }[] {
   const history = getHistory();
   const now = new Date();
   const result: { date: string; score: number }[] = [];
-
   for (let i = 6; i >= 0; i--) {
     const d = new Date(now);
     d.setDate(d.getDate() - i);
     const dateStr = d.toISOString().split('T')[0];
     const dayLabel = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
-
-    // 找到该天最新的记录
     const record = history.find(h => h.date.startsWith(dateStr));
-    result.push({
-      date: dayLabel,
-      score: record ? record.overallScore : 0,
-    });
+    result.push({ date: dayLabel, score: record ? record.overallScore : 0 });
   }
-
   return result;
 }
 
@@ -116,6 +106,9 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
+  type?: 'text' | 'image' | 'result-card';
+  imageUrl?: string;
+  reportId?: string;
 }
 
 export function getChatHistory(): ChatMessage[] {
@@ -128,9 +121,7 @@ export function getChatHistory(): ChatMessage[] {
 }
 
 export function saveChatHistory(messages: ChatMessage[]): void {
-  // 只保留最近 100 条消息
-  const trimmed = messages.slice(-100);
-  localStorage.setItem(CHAT_KEY, JSON.stringify(trimmed));
+  localStorage.setItem(CHAT_KEY, JSON.stringify(messages.slice(-100)));
 }
 
 export function clearChatHistory(): void {
@@ -138,7 +129,67 @@ export function clearChatHistory(): void {
 }
 
 // ============================================================
-// 生成缩略图（将图片压缩为小尺寸 base64）
+// 护肤日历
+// ============================================================
+
+export interface SkinLog {
+  date: string;          // YYYY-MM-DD
+  morning: string[];     // 早间护肤步骤
+  evening: string[];     // 晚间护肤步骤
+  skinStatus: string[];  // 皮肤状态标签
+  note: string;          // 备注
+  updatedAt: string;     // ISO string
+}
+
+export function getAllLogs(): Record<string, SkinLog> {
+  try {
+    return JSON.parse(localStorage.getItem(LOGS_KEY) || '{}');
+  } catch { return {}; }
+}
+
+export function getLog(date: string): SkinLog | null {
+  return getAllLogs()[date] || null;
+}
+
+export function saveLog(log: SkinLog): void {
+  const all = getAllLogs();
+  all[log.date] = { ...log, updatedAt: new Date().toISOString() };
+  localStorage.setItem(LOGS_KEY, JSON.stringify(all));
+}
+
+export function clearLogs(): void {
+  localStorage.removeItem(LOGS_KEY);
+}
+
+/** 获取有日志的日期集合（用于日历标记） */
+export function getLogDates(): Set<string> {
+  return new Set(Object.keys(getAllLogs()));
+}
+
+/** 获取最近 N 天的日志摘要（供 AI 读取） */
+export function getRecentLogsSummary(days = 7): string {
+  const all = getAllLogs();
+  const result: string[] = [];
+  const now = new Date();
+  for (let i = 0; i < days; i++) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    const log = all[key];
+    if (log) {
+      const parts: string[] = [`${key}：`];
+      if (log.morning.length) parts.push(`早间(${log.morning.join('、')})`);
+      if (log.evening.length) parts.push(`晚间(${log.evening.join('、')})`);
+      if (log.skinStatus.length) parts.push(`状态(${log.skinStatus.join('、')})`);
+      if (log.note) parts.push(`备注：${log.note}`);
+      result.push(parts.join(' '));
+    }
+  }
+  return result.length ? result.join('\n') : '暂无护肤记录';
+}
+
+// ============================================================
+// 生成缩略图
 // ============================================================
 
 export function generateThumbnail(imageUrl: string, size = 120): Promise<string> {
@@ -150,7 +201,6 @@ export function generateThumbnail(imageUrl: string, size = 120): Promise<string>
     img.onload = () => {
       canvas.width = size;
       canvas.height = size;
-      // 居中裁切
       const minDim = Math.min(img.width, img.height);
       const sx = (img.width - minDim) / 2;
       const sy = (img.height - minDim) / 2;
@@ -160,4 +210,18 @@ export function generateThumbnail(imageUrl: string, size = 120): Promise<string>
     img.onerror = () => resolve('');
     img.src = imageUrl;
   });
+}
+
+// ============================================================
+// 工具
+// ============================================================
+
+export function todayKey(): string {
+  return new Date().toISOString().split('T')[0];
+}
+
+export function clearAll(): void {
+  [HISTORY_KEY, FIRST_VISIT_KEY, CHAT_KEY, LOGS_KEY].forEach(k =>
+    localStorage.removeItem(k)
+  );
 }
