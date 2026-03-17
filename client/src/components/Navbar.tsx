@@ -1,30 +1,30 @@
-// 芯颜 AI Navbar v2 — 成熟简约
+// 芯颜 AI Navbar v3 — 全屏分页式
+// 支持 dark 模式（暗色背景页时文字变白）
 // 底色：暖灰白 | 强调：砖赭红 #B85C38 | 文字：深炭黑 #1A1A1A
 
-import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+interface NavbarProps {
+  dark?: boolean;
+}
 
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
-  }, []);
-
+export default function Navbar({ dark = false }: NavbarProps) {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
-        scrolled
-          ? 'bg-[#F7F6F4]/96 backdrop-blur-md border-b border-[#E4E2DF]'
-          : 'bg-transparent'
+        dark
+          ? 'bg-transparent'
+          : 'bg-[#F7F6F4]/96 backdrop-blur-md border-b border-[#E4E2DF]'
       }`}
     >
       <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-0 group select-none">
-          <span className="font-serif-sc text-[#1A1A1A] text-[1.15rem] font-semibold tracking-wide leading-none">
+          <span
+            className={`font-serif-sc text-[1.15rem] font-semibold tracking-wide leading-none transition-colors duration-300 ${
+              dark ? 'text-white' : 'text-[#1A1A1A]'
+            }`}
+          >
             芯颜
           </span>
           <span className="font-serif-sc text-[#B85C38] text-[1.15rem] font-semibold tracking-wide leading-none ml-0.5">
@@ -42,7 +42,11 @@ export default function Navbar() {
             <a
               key={item.href}
               href={item.href}
-              className="font-sans-sc text-sm text-[#4A4A4A] hover:text-[#1A1A1A] transition-colors duration-200 tracking-wide"
+              className={`font-sans-sc text-sm transition-colors duration-200 tracking-wide ${
+                dark
+                  ? 'text-white/70 hover:text-white'
+                  : 'text-[#4A4A4A] hover:text-[#1A1A1A]'
+              }`}
             >
               {item.label}
             </a>
@@ -52,7 +56,11 @@ export default function Navbar() {
         {/* CTA */}
         <a
           href="#upload"
-          className="hidden md:inline-flex items-center gap-2 bg-[#1A1A1A] text-[#F7F6F4] font-sans-sc text-sm px-5 py-2.5 rounded-sm hover:bg-[#B85C38] transition-colors duration-250 tracking-wide"
+          className={`hidden md:inline-flex items-center gap-2 font-sans-sc text-sm px-5 py-2.5 rounded-sm transition-colors duration-250 tracking-wide ${
+            dark
+              ? 'bg-white/10 text-white hover:bg-[#B85C38] border border-white/20'
+              : 'bg-[#1A1A1A] text-[#F7F6F4] hover:bg-[#B85C38]'
+          }`}
         >
           免费检测
         </a>

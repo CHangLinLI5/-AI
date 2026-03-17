@@ -1,4 +1,4 @@
-// 芯颜 AI FeaturesSection v2 — 成熟简约
+// 芯颜 AI FeaturesSection v3 — 全屏分页式
 // 暖灰白底 | 白色卡片 | 砖赭红图标强调
 
 import { Droplets, ScanFace, FlaskConical, ShoppingBag, Brain, Lock } from 'lucide-react';
@@ -16,11 +16,11 @@ const FEATURES = [
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="py-28 bg-[#F7F6F4]">
-      <div className="max-w-6xl mx-auto px-8">
+    <section id="features" className="w-full h-full bg-[#F7F6F4] overflow-y-auto">
+      <div className="max-w-6xl mx-auto px-8 py-16">
 
         {/* 标题 */}
-        <div className="mb-18">
+        <div className="mb-8">
           <p className="font-sans-sc text-xs text-[#B85C38] tracking-[0.2em] uppercase mb-4">核心功能</p>
           <h2 className="font-serif-sc text-4xl font-bold text-[#1A1A1A] leading-tight">
             专业级皮肤检测<br />触手可及
@@ -29,11 +29,11 @@ export default function FeaturesSection() {
         </div>
 
         {/* 主展示区 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-10">
           {/* 左：AI 分析图 */}
           <div className="relative">
             <div className="rounded-2xl overflow-hidden">
-              <img src={ANALYSIS_IMAGE} alt="AI 皮肤分析可视化" className="w-full h-[400px] object-cover" />
+              <img src={ANALYSIS_IMAGE} alt="AI 皮肤分析可视化" className="w-full h-[280px] object-cover" />
             </div>
             {/* 数据卡 */}
             <div className="absolute -bottom-5 -right-5 bg-white rounded-xl p-5 shadow-sm border border-[#E4E2DF]">

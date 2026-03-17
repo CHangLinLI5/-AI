@@ -1,4 +1,4 @@
-// 芯颜 AI HowItWorksSection v2 — 成熟简约
+// 芯颜 AI HowItWorksSection v3 — 全屏分页式
 // 深炭黑背景区块 | 砖赭红步骤强调
 
 import { Upload, Cpu, Sparkles } from 'lucide-react';
@@ -31,16 +31,16 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="py-28 bg-[#1A1A1A] relative overflow-hidden">
+    <section id="how-it-works" className="w-full h-full bg-[#1A1A1A] relative overflow-y-auto">
       {/* 极淡纹理 */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
         backgroundSize: '40px 40px',
       }} />
 
-      <div className="max-w-6xl mx-auto px-8 relative">
+      <div className="max-w-6xl mx-auto px-8 relative py-16">
         {/* 标题 */}
-        <div className="mb-18">
+        <div className="mb-10">
           <p className="font-sans-sc text-xs text-[#B85C38] tracking-[0.2em] uppercase mb-4">使用流程</p>
           <h2 className="font-serif-sc text-4xl font-bold text-white leading-tight">
             三步完成<br />

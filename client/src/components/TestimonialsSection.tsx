@@ -1,4 +1,4 @@
-// 芯颜 AI TestimonialsSection v2 — 成熟简约
+// 芯颜 AI TestimonialsSection v3 — 全屏分页式
 
 const TESTIMONIALS = [
   {
@@ -26,11 +26,11 @@ const TESTIMONIALS = [
 
 export default function TestimonialsSection() {
   return (
-    <section id="testimonials" className="py-28 bg-[#F7F6F4]">
-      <div className="max-w-6xl mx-auto px-8">
+    <section id="testimonials" className="w-full h-full bg-[#F7F6F4] overflow-y-auto">
+      <div className="max-w-6xl mx-auto px-8 py-14">
 
         {/* 标题 */}
-        <div className="mb-16">
+        <div className="mb-10">
           <p className="font-sans-sc text-xs text-[#B85C38] tracking-[0.2em] uppercase mb-4">用户评价</p>
           <h2 className="font-serif-sc text-4xl font-bold text-[#1A1A1A] leading-tight">
             她们的皮肤变化

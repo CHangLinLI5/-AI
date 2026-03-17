@@ -1,4 +1,4 @@
-// 芯颜 AI UploadSection v2 — 成熟简约
+// 芯颜 AI UploadSection v3 — 全屏分页式
 // 暖灰底 | 白色卡片 | 砖赭红强调
 
 import { useState, useRef, useCallback } from 'react';
@@ -58,12 +58,12 @@ export default function UploadSection({ onAnalysisComplete }: UploadSectionProps
   };
 
   return (
-    <section id="upload" className="py-28 bg-[#EFEDE9]">
+    <section id="upload" className="w-full h-full bg-[#EFEDE9] overflow-y-auto">
       {isAnalyzing && <AnalyzingOverlay />}
 
-      <div className="max-w-2xl mx-auto px-8">
+      <div className="max-w-2xl mx-auto px-8 py-12">
         {/* 标题 */}
-        <div className="mb-12">
+        <div className="mb-8">
           <p className="font-sans-sc text-xs text-[#B85C38] tracking-[0.2em] uppercase mb-4">开始检测</p>
           <h2 className="font-serif-sc text-4xl font-bold text-[#1A1A1A] leading-tight">
             上传你的脸部照片

@@ -1,4 +1,4 @@
-// 芯颜 AI HeroSection v2 — 成熟简约
+// 芯颜 AI HeroSection v3 — 全屏分页式
 // 暖灰白底 | 深炭黑文字 | 砖赭红强调 | 非对称布局
 
 import { ArrowRight, Shield, Zap, Star } from 'lucide-react';
@@ -7,12 +7,12 @@ const HERO_IMAGE = 'https://d2xsxph8kpxj0f.cloudfront.net/309924522100821332/mfr
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen bg-[#F7F6F4] overflow-hidden flex items-center">
+    <section className="relative w-full h-full bg-[#F7F6F4] overflow-hidden flex items-center">
       {/* 极淡背景纹理圆 */}
       <div className="absolute top-0 right-0 w-[700px] h-[700px] rounded-full bg-[#EFEDE9] -translate-y-1/3 translate-x-1/4 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#F2E8E3]/50 translate-y-1/2 -translate-x-1/3 pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto px-8 w-full pt-28 pb-20">
+      <div className="max-w-6xl mx-auto px-8 w-full pt-20 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* 左侧文字 */}
@@ -91,7 +91,7 @@ export default function HeroSection() {
               <img
                 src={HERO_IMAGE}
                 alt="AI 皮肤检测示例"
-                className="w-full h-[520px] object-cover"
+                className="w-full h-[460px] object-cover"
               />
               {/* 图片遮罩 */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/10 to-transparent" />
