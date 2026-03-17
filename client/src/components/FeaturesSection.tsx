@@ -1,7 +1,7 @@
 // 芯颜 AI FeaturesSection v3 — 全屏分页式
 // 暖灰白底 | 白色卡片 | 砖赭红图标强调
 
-import { Droplets, ScanFace, FlaskConical, ShoppingBag, Brain, Lock } from 'lucide-react';
+import { Droplets, ScanFace, FlaskConical, ShoppingBag, Brain, Lock, ArrowRight } from 'lucide-react';
 
 const ANALYSIS_IMAGE = 'https://d2xsxph8kpxj0f.cloudfront.net/309924522100821332/mfrG97Li6QqEizj9zKToc6/skin-analysis-visual-A5MqxXgoxpLKiXH6hWUVmR.webp';
 
@@ -14,7 +14,11 @@ const FEATURES = [
   { icon: Lock,         title: '隐私安全保障',   description: '照片仅用于本次分析，分析完成后立即删除，不存储任何个人图像数据' },
 ];
 
-export default function FeaturesSection() {
+interface FeaturesSectionProps {
+  onStartDetect?: () => void;
+}
+
+export default function FeaturesSection({ onStartDetect }: FeaturesSectionProps) {
   return (
     <section id="features" className="w-full h-full bg-[#F7F6F4] overflow-y-auto">
       <div className="max-w-6xl mx-auto px-8 py-16">
@@ -73,7 +77,7 @@ export default function FeaturesSection() {
         </div>
 
         {/* 底部卡片网格 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
           {FEATURES.slice(3).map(({ icon: Icon, title, description }) => (
             <div key={title} className="p-6 bg-white rounded-xl border border-[#E4E2DF] hover:border-[#C8C5C0] hover:shadow-sm transition-all duration-250 card-hover">
               <div className="w-10 h-10 rounded-lg bg-[#F2E8E3] flex items-center justify-center mb-4">
@@ -84,6 +88,19 @@ export default function FeaturesSection() {
             </div>
           ))}
         </div>
+
+        {/* CTA */}
+        {onStartDetect && (
+          <div className="text-center">
+            <button
+              onClick={onStartDetect}
+              className="inline-flex items-center gap-2.5 bg-[#1A1A1A] text-[#F7F6F4] font-sans-sc text-sm px-8 py-3.5 rounded-sm hover:bg-[#B85C38] transition-colors duration-250 group tracking-wide"
+            >
+              开始检测我的皮肤
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

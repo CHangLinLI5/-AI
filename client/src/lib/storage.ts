@@ -1,0 +1,163 @@
+// 芯颜 AI — localStorage 数据管理
+// 管理检测历史和聊天记录
+
+import type { SkinAnalysisResult } from './skinAnalysis';
+
+// ============================================================
+// 检测历史
+// ============================================================
+
+export interface HistoryRecord {
+  id: string;
+  date: string;           // ISO string
+  overallScore: number;
+  skinType: string;
+  skinTypeDescription: string;
+  metrics: SkinAnalysisResult['metrics'];
+  issues: SkinAnalysisResult['issues'];
+  recommendations: string[];
+  products: SkinAnalysisResult['products'];
+  thumbnail: string;      // base64 缩略图（压缩后）
+  analysisTime: string;
+}
+
+const HISTORY_KEY = 'xinyan_history';
+const FIRST_VISIT_KEY = 'xinyan_first_visit';
+const CHAT_KEY = 'xinyan_chat_history';
+
+export function getHistory(): HistoryRecord[] {
+  try {
+    const data = localStorage.getItem(HISTORY_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function addHistory(result: SkinAnalysisResult, thumbnail: string): HistoryRecord {
+  const record: HistoryRecord = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    date: new Date().toISOString(),
+    overallScore: result.overallScore,
+    skinType: result.skinType,
+    skinTypeDescription: result.skinTypeDescription,
+    metrics: result.metrics,
+    issues: result.issues,
+    recommendations: result.recommendations,
+    products: result.products,
+    thumbnail,
+    analysisTime: result.analysisTime,
+  };
+
+  const history = getHistory();
+  history.unshift(record); // 最新的放前面
+
+  // 最多保留 30 条记录（避免 localStorage 爆满）
+  if (history.length > 30) history.length = 30;
+
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  return record;
+}
+
+export function getHistoryById(id: string): HistoryRecord | null {
+  const history = getHistory();
+  return history.find(h => h.id === id) || null;
+}
+
+export function clearHistory(): void {
+  localStorage.removeItem(HISTORY_KEY);
+}
+
+export function getLatestRecord(): HistoryRecord | null {
+  const history = getHistory();
+  return history.length > 0 ? history[0] : null;
+}
+
+export function getLast7DaysScores(): { date: string; score: number }[] {
+  const history = getHistory();
+  const now = new Date();
+  const result: { date: string; score: number }[] = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().split('T')[0];
+    const dayLabel = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
+
+    // 找到该天最新的记录
+    const record = history.find(h => h.date.startsWith(dateStr));
+    result.push({
+      date: dayLabel,
+      score: record ? record.overallScore : 0,
+    });
+  }
+
+  return result;
+}
+
+// ============================================================
+// 首次访问
+// ============================================================
+
+export function isFirstVisit(): boolean {
+  return !localStorage.getItem(FIRST_VISIT_KEY);
+}
+
+export function markVisited(): void {
+  localStorage.setItem(FIRST_VISIT_KEY, 'true');
+}
+
+// ============================================================
+// 聊天记录
+// ============================================================
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+}
+
+export function getChatHistory(): ChatMessage[] {
+  try {
+    const data = localStorage.getItem(CHAT_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveChatHistory(messages: ChatMessage[]): void {
+  // 只保留最近 100 条消息
+  const trimmed = messages.slice(-100);
+  localStorage.setItem(CHAT_KEY, JSON.stringify(trimmed));
+}
+
+export function clearChatHistory(): void {
+  localStorage.removeItem(CHAT_KEY);
+}
+
+// ============================================================
+// 生成缩略图（将图片压缩为小尺寸 base64）
+// ============================================================
+
+export function generateThumbnail(imageUrl: string, size = 120): Promise<string> {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      canvas.width = size;
+      canvas.height = size;
+      // 居中裁切
+      const minDim = Math.min(img.width, img.height);
+      const sx = (img.width - minDim) / 2;
+      const sy = (img.height - minDim) / 2;
+      ctx?.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+      resolve(canvas.toDataURL('image/jpeg', 0.6));
+    };
+    img.onerror = () => resolve('');
+    img.src = imageUrl;
+  });
+}

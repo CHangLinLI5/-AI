@@ -1,7 +1,7 @@
 // 芯颜 AI HowItWorksSection v3 — 全屏分页式
 // 深炭黑背景区块 | 砖赭红步骤强调
 
-import { Upload, Cpu, Sparkles } from 'lucide-react';
+import { Upload, Cpu, Sparkles, ArrowRight } from 'lucide-react';
 
 const UPLOAD_ILLUSTRATION = 'https://d2xsxph8kpxj0f.cloudfront.net/309924522100821332/mfrG97Li6QqEizj9zKToc6/upload-illustration-J2k8gzeLUFjJwLHczjKhvG.webp';
 
@@ -29,7 +29,11 @@ const STEPS = [
   },
 ];
 
-export default function HowItWorksSection() {
+interface HowItWorksSectionProps {
+  onStartDetect?: () => void;
+}
+
+export default function HowItWorksSection({ onStartDetect }: HowItWorksSectionProps) {
   return (
     <section id="how-it-works" className="w-full h-full bg-[#1A1A1A] relative overflow-y-auto">
       {/* 极淡纹理 */}
@@ -81,6 +85,19 @@ export default function HowItWorksSection() {
                 </div>
               </div>
             ))}
+
+            {/* CTA */}
+            {onStartDetect && (
+              <div className="pt-2 pl-16">
+                <button
+                  onClick={onStartDetect}
+                  className="inline-flex items-center gap-2.5 bg-[#B85C38] text-white font-sans-sc text-sm px-8 py-3.5 rounded-sm hover:bg-[#A04E30] transition-colors duration-250 group tracking-wide"
+                >
+                  立即开始
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* 右：插图 */}

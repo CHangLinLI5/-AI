@@ -1,5 +1,7 @@
 // 芯颜 AI TestimonialsSection v3 — 全屏分页式
 
+import { ArrowRight } from 'lucide-react';
+
 const TESTIMONIALS = [
   {
     name: '小雨', age: 24, location: '上海',
@@ -24,7 +26,11 @@ const TESTIMONIALS = [
   },
 ];
 
-export default function TestimonialsSection() {
+interface TestimonialsSectionProps {
+  onStartDetect?: () => void;
+}
+
+export default function TestimonialsSection({ onStartDetect }: TestimonialsSectionProps) {
   return (
     <section id="testimonials" className="w-full h-full bg-[#F7F6F4] overflow-y-auto">
       <div className="max-w-6xl mx-auto px-8 py-14">
@@ -67,7 +73,7 @@ export default function TestimonialsSection() {
         </div>
 
         {/* 数据统计 */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-5">
           {[
             { number: '500,000+', label: '用户信赖' },
             { number: '98%',      label: '用户满意度' },
@@ -80,6 +86,19 @@ export default function TestimonialsSection() {
             </div>
           ))}
         </div>
+
+        {/* CTA */}
+        {onStartDetect && (
+          <div className="mt-10 text-center">
+            <button
+              onClick={onStartDetect}
+              className="inline-flex items-center gap-2.5 bg-[#1A1A1A] text-[#F7F6F4] font-sans-sc text-sm px-8 py-3.5 rounded-sm hover:bg-[#B85C38] transition-colors duration-250 group tracking-wide"
+            >
+              免费检测我的皮肤
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

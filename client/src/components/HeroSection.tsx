@@ -5,7 +5,11 @@ import { ArrowRight, Shield, Zap, Star } from 'lucide-react';
 
 const HERO_IMAGE = 'https://d2xsxph8kpxj0f.cloudfront.net/309924522100821332/mfrG97Li6QqEizj9zKToc6/hero-bg-Kr95RtWHsDazEYa6N6wRof.webp';
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  onStartDetect?: () => void;
+}
+
+export default function HeroSection({ onStartDetect }: HeroSectionProps) {
   return (
     <section className="relative w-full h-full bg-[#F7F6F4] overflow-hidden flex items-center">
       {/* 极淡背景纹理圆 */}
@@ -55,13 +59,13 @@ export default function HeroSection() {
 
             {/* CTA */}
             <div className="flex items-center gap-5 animate-fade-up-delay-3">
-              <a
-                href="#upload"
+              <button
+                onClick={onStartDetect}
                 className="inline-flex items-center gap-2.5 bg-[#1A1A1A] text-[#F7F6F4] font-sans-sc text-sm px-8 py-3.5 rounded-sm hover:bg-[#B85C38] transition-colors duration-250 group tracking-wide"
               >
                 立即免费检测
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
-              </a>
+              </button>
               <a
                 href="#how-it-works"
                 className="font-sans-sc text-sm text-[#4A4A4A] hover:text-[#1A1A1A] underline underline-offset-4 decoration-[#C8C5C0] hover:decoration-[#1A1A1A] transition-all tracking-wide"
