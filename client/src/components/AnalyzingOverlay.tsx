@@ -1,4 +1,4 @@
-// SkinAI AnalyzingOverlay — AI 分析中动画覆盖层
+// 芯颜 AI AnalyzingOverlay — AI 分析中动画覆盖层
 // 全屏遮罩 + 环形进度 + 逐步提示文字
 
 import { useEffect, useState } from 'react';

@@ -1,4 +1,4 @@
-// SkinAI 主页面 — 整合所有区域
+// 芯颜 AI 主页面 — 整合所有区域
 // 设计风格：极简医疗美学 | 深森绿 + 玫瑰金 + 米白
 
 import { useState } from 'react';

@@ -1,4 +1,4 @@
-// SkinAI HowItWorksSection — 使用流程说明
+// 芯颜 AI HowItWorksSection — 使用流程说明
 // 三步骤横向布局，深森绿主色
 
 import { Upload, Cpu, Sparkles } from 'lucide-react';
@@ -17,7 +17,7 @@ const STEPS = [
     step: '02',
     icon: Cpu,
     title: 'AI 深度分析',
-    description: 'SkinAI 将在 3 秒内完成 12 项皮肤指标的深度检测与评估',
+    description: '芯颜 AI 将在 3 秒内完成 12 项皮肤指标的深度检测与评估',
     tips: ['12 项皮肤指标', '像素级精准分析', '数据实时处理'],
   },
   {

@@ -1,5 +1,5 @@
 /* =============================================================
-   SkinAI 设计系统 — 极简医疗美学
+   芯颜 AI 设计系统 — 极简医疗美学
    色彩：深森绿 #1C3A2E | 玫瑰金 #C9956A | 米白 #FAF8F5
    字体：Noto Serif SC (标题) + Noto Sans SC (正文) + Playfair Display (英文点缀)
    ============================================================= */
@@ -47,7 +47,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* SkinAI 品牌色 */
+  /* 芯颜 AI 品牌色 */
   --color-forest: oklch(0.26 0.06 155);
   --color-forest-light: oklch(0.35 0.07 155);
   --color-rose-gold: oklch(0.72 0.1 55);
@@ -156,7 +156,7 @@
     }
   }
 
-  /* SkinAI 自定义组件 */
+  /* 芯颜 AI 自定义组件 */
   .font-serif-sc {
     font-family: 'Noto Serif SC', 'Songti SC', serif;
   }

@@ -1,4 +1,4 @@
-// SkinAI - 皮肤分析数据模型与模拟逻辑
+// 芯颜 AI - 皮肤分析数据模型与模拟逻辑
 // 设计风格：极简医疗美学 | 深森绿 + 玫瑰金 + 米白
 
 export interface SkinMetric {

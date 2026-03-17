@@ -1,4 +1,4 @@
-// SkinAI UploadSection — 图片上传与预览
+// 芯颜 AI UploadSection — 图片上传与预览
 // 支持拖拽上传、点击上传、预览、分析触发
 
 import { useState, useRef, useCallback } from 'react';

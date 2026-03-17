@@ -1,4 +1,4 @@
-# SkinAI — AI 智能皮肤检测网站
+# 芯颜 AI — AI 智能皮肤检测网站
 
 > 面向中国用户的 AI 皮肤检测平台，上传脸部照片即可获得专业皮肤分析报告与护肤建议。
 
@@ -341,4 +341,4 @@ pnpm format     # Prettier 代码格式化
 
 ## 许可证
 
-MIT License © 2025 SkinAI
+MIT License © 2025 芯颜 AI

@@ -1,4 +1,4 @@
-// SkinAI App — 路由与主题配置
+// 芯颜 AI App — 路由与主题配置
 // 设计风格：极简医疗美学 | 浅色主题
 
 import { Toaster } from "@/components/ui/sonner";

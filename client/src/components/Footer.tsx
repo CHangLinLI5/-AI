@@ -1,4 +1,4 @@
-// SkinAI Footer — 简洁页脚
+// 芯颜 AI Footer — 简洁页脚
 
 import { Sparkles } from 'lucide-react';
 
@@ -12,7 +12,7 @@ export default function Footer() {
             <div className="w-8 h-8 rounded-full bg-[#C9956A]/20 flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-[#C9956A]" />
             </div>
-            <span className="font-serif-sc text-[#FAF8F5] text-lg font-semibold">SkinAI</span>
+            <span className="font-serif-sc text-[#FAF8F5] text-lg font-semibold">芯颜 AI</span>
           </div>
 
           {/* 链接 */}
@@ -30,7 +30,7 @@ export default function Footer() {
 
           {/* 版权 */}
           <p className="font-sans-sc text-sm text-white/40">
-            © 2025 SkinAI. 保留所有权利
+            © 2025 芯颜 AI. 保留所有权利
           </p>
         </div>
 

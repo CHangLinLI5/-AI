@@ -1,4 +1,4 @@
-// SkinAI Navbar — 极简医疗美学
+// 芯颜 AI Navbar — 极简医疗美学
 // 深森绿品牌色，透明背景滚动变实色
 
 import { useState, useEffect } from 'react';
@@ -29,7 +29,7 @@ export default function Navbar() {
             <Sparkles className="w-4 h-4 text-[#C9956A]" />
           </div>
           <span className="font-serif-sc text-[#1C3A2E] text-lg font-semibold tracking-wide">
-            SkinAI
+            芯颜 AI
           </span>
         </Link>
 

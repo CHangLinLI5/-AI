@@ -1,4 +1,4 @@
-// SkinAI ResultSection — 分析结果展示页面
+// 芯颜 AI ResultSection — 分析结果展示页面
 // 卡片式 UI，深森绿 + 玫瑰金配色
 
 import { useState } from 'react';

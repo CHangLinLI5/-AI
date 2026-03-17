@@ -1,4 +1,4 @@
-// SkinAI TestimonialsSection — 用户评价区域
+// 芯颜 AI TestimonialsSection — 用户评价区域
 
 const TESTIMONIALS = [
   {
@@ -7,7 +7,7 @@ const TESTIMONIALS = [
     location: '上海',
     avatar: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=80&q=80',
     rating: 5,
-    content: '用了 SkinAI 才知道自己是混油皮，之前一直用错产品！分析结果非常详细，推荐的水杨酸精华用了两周，毛孔真的细了很多。',
+    content: '用了 芯颜 AI 才知道自己是混油皮，之前一直用错产品！分析结果非常详细，推荐的水杨酸精华用了两周，毛孔真的细了很多。',
     highlight: '毛孔细了很多',
   },
   {
@@ -16,7 +16,7 @@ const TESTIMONIALS = [
     location: '北京',
     avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&q=80',
     rating: 5,
-    content: '作为一个护肤小白，SkinAI 给了我非常清晰的护肤步骤和产品推荐。最喜欢它的隐私保护，照片分析完就删除，很放心。',
+    content: '作为一个护肤小白，芯颜 AI 给了我非常清晰的护肤步骤和产品推荐。最喜欢它的隐私保护，照片分析完就删除，很放心。',
     highlight: '清晰的护肤指导',
   },
   {

@@ -1,4 +1,4 @@
-// SkinAI HeroSection — 极简医疗美学
+// 芯颜 AI HeroSection — 极简医疗美学
 // 非对称布局：文字左置，图片右置，米白背景
 
 import { ArrowRight, Shield, Zap, Star } from 'lucide-react';
@@ -36,7 +36,7 @@ export default function HeroSection() {
 
             {/* 描述 */}
             <p className="font-sans-sc text-[#5A5A5A] text-lg leading-relaxed animate-fade-up-delay-2">
-              上传一张脸部照片，SkinAI 将在 3 秒内完成深度皮肤检测，
+              上传一张脸部照片，芯颜 AI 将在 3 秒内完成深度皮肤检测，
               分析痘痘、毛孔、油脂、色斑等 12 项皮肤指标，
               为你定制专属护肤方案。
             </p>

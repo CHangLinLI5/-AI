@@ -1,4 +1,4 @@
-// SkinAI FeaturesSection — 功能介绍区域
+// 芯颜 AI FeaturesSection — 功能介绍区域
 // 深森绿卡片 + 米白背景，交错布局
 
 import { Droplets, ScanFace, FlaskConical, ShoppingBag, Brain, Lock } from 'lucide-react';
