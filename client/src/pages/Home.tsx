@@ -1,25 +1,66 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+// SkinAI 主页面 — 整合所有区域
+// 设计风格：极简医疗美学 | 深森绿 + 玫瑰金 + 米白
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
- */
+import { useState } from 'react';
+import Navbar from '@/components/Navbar';
+import HeroSection from '@/components/HeroSection';
+import FeaturesSection from '@/components/FeaturesSection';
+import HowItWorksSection from '@/components/HowItWorksSection';
+import UploadSection from '@/components/UploadSection';
+import ResultSection from '@/components/ResultSection';
+import TestimonialsSection from '@/components/TestimonialsSection';
+import Footer from '@/components/Footer';
+import type { SkinAnalysisResult } from '@/lib/skinAnalysis';
+
+type PageState = 'landing' | 'result';
+
 export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+  const [pageState, setPageState] = useState<PageState>('landing');
+  const [analysisResult, setAnalysisResult] = useState<SkinAnalysisResult | null>(null);
+  const [analysisImageUrl, setAnalysisImageUrl] = useState<string>('');
+
+  const handleAnalysisComplete = (result: SkinAnalysisResult, imageUrl: string) => {
+    setAnalysisResult(result);
+    setAnalysisImageUrl(imageUrl);
+    setPageState('result');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleReset = () => {
+    setPageState('landing');
+    setAnalysisResult(null);
+    setAnalysisImageUrl('');
+    // 滚动到上传区域
+    setTimeout(() => {
+      document.getElementById('upload')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  if (pageState === 'result' && analysisResult) {
+    return (
+      <div className="min-h-screen bg-[#FAF8F5]">
+        <Navbar />
+        <div className="pt-16">
+          <ResultSection
+            result={analysisResult}
+            imageUrl={analysisImageUrl}
+            onReset={handleReset}
+          />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
+    <div className="min-h-screen bg-[#FAF8F5]">
+      <Navbar />
+      <HeroSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <UploadSection onAnalysisComplete={handleAnalysisComplete} />
+      <TestimonialsSection />
+      <Footer />
     </div>
   );
 }
